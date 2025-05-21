@@ -1,112 +1,94 @@
-// Main JavaScript for the Crime Record Management System
+// Main JavaScript file for Crime Record Management System
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize DataTables
-    initializeDataTables();
-    
-    // Initialize tooltips
-    initializeTooltips();
-    
-    // Initialize search functionality
-    initializeSearch();
-    
-    // Add event listeners for delete confirmations
-    initializeDeleteConfirmations();
-});
-
-// Initialize DataTables for all tables with the data-table class
+// Initialize DataTables
 function initializeDataTables() {
-    const tables = document.querySelectorAll('.data-table');
-    tables.forEach(table => {
-        new DataTable(table, {
+    // Apply DataTables to all tables with the datatable class
+    $('.datatable').each(function() {
+        $(this).DataTable({
             responsive: true,
-            paging: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            lengthMenu: [10, 25, 50, 100],
             pageLength: 10,
-            language: {
-                search: "Search:",
-                lengthMenu: "Show _MENU_ entries",
-                info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                infoEmpty: "Showing 0 to 0 of 0 entries",
-                infoFiltered: "(filtered from _MAX_ total entries)",
-                zeroRecords: "No matching records found"
-            }
+            lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
         });
     });
 }
 
 // Initialize Bootstrap tooltips
 function initializeTooltips() {
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 }
 
-// Global search functionality
+// Initialize search functionality
 function initializeSearch() {
-    const searchInput = document.getElementById('global-search');
-    if (searchInput) {
-        searchInput.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                const searchValue = this.value.trim();
-                if (searchValue !== '') {
-                    // Redirect to a search results page or filter the current view
-                    // This is a placeholder - actual implementation would depend on requirements
-                    alert('Search functionality would be implemented here with: ' + searchValue);
-                }
-            }
+    $('#searchInput').on('keyup', function() {
+        var value = $(this).val().toLowerCase();
+        $(".searchable tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
-    }
+    });
 }
 
-// Add confirmation for delete actions
+// Initialize delete confirmations
 function initializeDeleteConfirmations() {
-    const deleteButtons = document.querySelectorAll('.delete-btn');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            if (!confirm('Are you sure you want to delete this item? This action cannot be undone.')) {
-                e.preventDefault();
-            }
-        });
+    $('.delete-btn').on('click', function(e) {
+        if (!confirm('Are you sure you want to delete this item? This action cannot be undone.')) {
+            e.preventDefault();
+        }
     });
 }
 
 // Show alert message
 function showAlert(message, type = 'success') {
-    const alertContainer = document.getElementById('alert-container');
-    if (alertContainer) {
-        const alertDiv = document.createElement('div');
-        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-        alertDiv.role = 'alert';
-        
-        alertDiv.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    const alertPlaceholder = document.getElementById('alertPlaceholder');
+    if (alertPlaceholder) {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         `;
-        
-        alertContainer.appendChild(alertDiv);
-        
+        alertPlaceholder.appendChild(wrapper);
+
         // Auto-dismiss after 5 seconds
         setTimeout(() => {
-            const alert = bootstrap.Alert.getInstance(alertDiv);
-            if (alert) {
-                alert.close();
-            } else {
-                alertDiv.remove();
-            }
+            const alert = bootstrap.Alert.getOrCreateInstance(wrapper.querySelector('.alert'));
+            alert.close();
         }, 5000);
     }
 }
 
 // Toggle sidebar on mobile
 function toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    const mainContent = document.querySelector('.main-content');
-    
-    if (sidebar && mainContent) {
-        sidebar.classList.toggle('sidebar-collapsed');
-        mainContent.classList.toggle('content-expanded');
-    }
+    document.querySelector('.sidebar').classList.toggle('active');
+    document.querySelector('.content').classList.toggle('active');
 }
+
+// Document ready function
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all components if jQuery is available
+    if (typeof $ !== 'undefined') {
+        initializeDataTables();
+        initializeSearch();
+        initializeDeleteConfirmations();
+    }
+    
+    // Initialize Bootstrap components
+    initializeTooltips();
+    
+    // Add event listener for sidebar toggle
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', toggleSidebar);
+    }
+    
+    // Add active class to current nav item
+    const currentLocation = window.location.pathname;
+    document.querySelectorAll('.sidebar-menu a').forEach(link => {
+        if (currentLocation.includes(link.getAttribute('href'))) {
+            link.parentElement.classList.add('active');
+        }
+    });
+});

@@ -1,7 +1,7 @@
 from django import forms
 from .models import (
     PoliceStation, Officer, CrimeType, Crime, 
-    FIRDetail, Criminal, User, Admin
+    FIRDetail, Criminal, Admin, User, Profile
 )
 
 class LoginForm(forms.Form):
@@ -76,7 +76,17 @@ class CriminalForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['admin']
+        fields = ['admin', 'username']
         widgets = {
             'admin': forms.Select(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['user', 'full_name']
+        widgets = {
+            'user': forms.Select(attrs={'class': 'form-control'}),
+            'full_name': forms.TextInput(attrs={'class': 'form-control'}),
         }

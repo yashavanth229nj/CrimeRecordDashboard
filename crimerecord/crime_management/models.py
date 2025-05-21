@@ -2,23 +2,26 @@ from django.db import models
 
 class Admin(models.Model):
     admin_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100, default="Admin")
     
     def __str__(self):
-        return f"Admin {self.admin_id}"
+        return str(self.name)
 
 class User(models.Model):
     user_id = models.AutoField(primary_key=True)
     admin = models.ForeignKey(Admin, on_delete=models.CASCADE)
+    username = models.CharField(max_length=100, null=True, blank=True)
     
     def __str__(self):
-        return f"User {self.user_id}"
+        return str(self.username) if self.username else f"User {self.user_id}"
 
 class Profile(models.Model):
     profile_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=200, null=True, blank=True)
     
     def __str__(self):
-        return f"Profile {self.profile_id}"
+        return str(self.full_name) if self.full_name else f"Profile {self.profile_id}"
 
 class PoliceStation(models.Model):
     station_id = models.AutoField(primary_key=True)
@@ -29,7 +32,7 @@ class PoliceStation(models.Model):
     address = models.CharField(max_length=255, null=True, blank=True)
     
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class Officer(models.Model):
     officer_id = models.AutoField(primary_key=True)
@@ -39,7 +42,7 @@ class Officer(models.Model):
     station = models.ForeignKey(PoliceStation, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class CrimeType(models.Model):
     crime_type_id = models.AutoField(primary_key=True)
@@ -47,7 +50,7 @@ class CrimeType(models.Model):
     description = models.TextField(null=True, blank=True)
     
     def __str__(self):
-        return self.crime_type_name
+        return str(self.crime_type_name)
 
 class Crime(models.Model):
     crime_id = models.AutoField(primary_key=True)
@@ -83,7 +86,7 @@ class Criminal(models.Model):
     nationality = models.CharField(max_length=50, null=True, blank=True)
     
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class CriminalCrime(models.Model):
     criminal = models.ForeignKey(Criminal, on_delete=models.CASCADE)

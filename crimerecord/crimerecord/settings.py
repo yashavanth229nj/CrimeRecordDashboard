@@ -66,8 +66,15 @@ WSGI_APPLICATION = 'crimerecord.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'crimerecord.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'crimerecord',
+        'USER': 'root',
+        'PASSWORD': 'Yeshu@2005',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 

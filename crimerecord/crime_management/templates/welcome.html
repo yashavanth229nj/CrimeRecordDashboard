@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crime Record Management System</title>
+    <title>Welcome - Crime Record Management System</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,115 +13,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <!-- Custom CSS -->
-    <style>
-        :root {
-            --primary-color: #0d47a1;
-            --primary-dark: #002171;
-            --primary-light: #5472d3;
-            --accent-color: #d32f2f;
-            --light-gray: #f5f5f5;
-            --dark-gray: #212121;
-            --white: #ffffff;
-            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--light-gray);
-            color: var(--dark-gray);
-        }
-        
-        .hero-section {
-            background-color: var(--primary-dark);
-            color: var(--white);
-            padding: 100px 0;
-            text-align: center;
-        }
-        
-        .hero-section h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        
-        .hero-section p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            padding: 10px 25px;
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
-        }
-        
-        .features {
-            padding: 80px 0;
-        }
-        
-        .feature-box {
-            text-align: center;
-            padding: 30px;
-            border-radius: 8px;
-            background-color: var(--white);
-            box-shadow: var(--shadow);
-            height: 100%;
-            transition: transform 0.3s;
-        }
-        
-        .feature-box:hover {
-            transform: translateY(-10px);
-        }
-        
-        .feature-icon {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-        
-        .about-section {
-            background-color: var(--primary-light);
-            color: var(--white);
-            padding: 80px 0;
-        }
-        
-        .screenshot-section {
-            padding: 80px 0;
-        }
-        
-        .screenshot {
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        
-        .screenshot img {
-            width: 100%;
-            height: auto;
-            transition: transform 0.3s;
-        }
-        
-        .screenshot:hover img {
-            transform: scale(1.05);
-        }
-        
-        footer {
-            background-color: var(--primary-dark);
-            color: var(--white);
-            padding: 30px 0;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <!-- Hero Section -->
@@ -128,12 +21,15 @@
         <div class="container">
             <h1>Crime Record Management System</h1>
             <p>An advanced digital solution for law enforcement agencies to efficiently manage and track crime records, police stations, officers, and criminal data.</p>
-            <a href="#features" class="btn btn-primary btn-lg">Learn More</a>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg">Register</a>
+            </div>
         </div>
     </section>
     
     <!-- Features Section -->
-    <section class="features" id="features">
+    <section class="py-5">
         <div class="container">
             <div class="row text-center mb-5">
                 <div class="col-12">
@@ -207,76 +103,26 @@
     </section>
     
     <!-- About Section -->
-    <section class="about-section">
+    <section class="py-5 bg-primary text-white">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-md-6">
                     <h2>About This System</h2>
                     <p>The Crime Record Management System is a comprehensive solution designed to facilitate the efficient management of crime-related data for law enforcement agencies. It provides a centralized platform for recording, tracking, and analyzing crime incidents, criminal profiles, and police operations.</p>
                     <p>Built using modern technologies including Django, Bootstrap, and Chart.js, the system offers a user-friendly interface with responsive design for optimal usability across devices.</p>
                 </div>
                 <div class="col-md-6">
-                    <h2>Technical Specifications</h2>
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Backend:</strong> Django (Python)</li>
-                        <li class="list-group-item"><strong>Frontend:</strong> HTML, CSS, JavaScript, Bootstrap 5</li>
-                        <li class="list-group-item"><strong>Database:</strong> MySQL</li>
-                        <li class="list-group-item"><strong>Data Visualization:</strong> Chart.js</li>
-                        <li class="list-group-item"><strong>Enhanced Tables:</strong> DataTables</li>
-                        <li class="list-group-item"><strong>Icons:</strong> FontAwesome</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Screenshots Section -->
-    <section class="screenshot-section">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-12">
-                    <h2>System Interface</h2>
-                    <p class="lead">Take a look at the intuitive user interface of our Crime Record Management System</p>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    <div class="screenshot">
-                        <img src="https://placehold.co/600x400?text=Dashboard+View" alt="Dashboard View" class="img-fluid">
-                        <div class="p-3">
-                            <h4>Dashboard</h4>
-                            <p>Overview of crime statistics with interactive charts and recent FIR details.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6 mb-4">
-                    <div class="screenshot">
-                        <img src="https://placehold.co/600x400?text=Police+Stations+View" alt="Police Stations View" class="img-fluid">
-                        <div class="p-3">
-                            <h4>Police Stations Management</h4>
-                            <p>Comprehensive list of police stations with their details and management options.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6 mb-4">
-                    <div class="screenshot">
-                        <img src="https://placehold.co/600x400?text=Criminal+Records+View" alt="Criminal Records View" class="img-fluid">
-                        <div class="p-3">
-                            <h4>Criminal Records</h4>
-                            <p>Detailed records of criminals with their personal information and associated crimes.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6 mb-4">
-                    <div class="screenshot">
-                        <img src="https://placehold.co/600x400?text=FIR+Details+View" alt="FIR Details View" class="img-fluid">
-                        <div class="p-3">
-                            <h4>FIR Management</h4>
-                            <p>Comprehensive FIR details with date, time, crime information, and involved parties.</p>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="text-primary">Technical Specifications</h3>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Backend:</strong> Django (Python)</li>
+                                <li class="list-group-item"><strong>Frontend:</strong> HTML, CSS, JavaScript, Bootstrap 5</li>
+                                <li class="list-group-item"><strong>Database:</strong> MySQL / SQLite</li>
+                                <li class="list-group-item"><strong>Data Visualization:</strong> Chart.js</li>
+                                <li class="list-group-item"><strong>Enhanced Tables:</strong> DataTables</li>
+                                <li class="list-group-item"><strong>Icons:</strong> FontAwesome</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -285,9 +131,9 @@
     </section>
     
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Crime Record Management System. All rights reserved.</p>
+    <footer class="py-4 bg-dark text-white">
+        <div class="container text-center">
+            <p>&copy; 2023 Crime Record Management System. All rights reserved.</p>
         </div>
     </footer>
     

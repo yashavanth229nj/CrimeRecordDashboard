@@ -1,129 +1,524 @@
-{% extends 'base.html' %}
-
-{% block title %}Dashboard - Crime Record Management System{% endblock %}
-
-{% block page_title %}Dashboard{% endblock %}
-
-{% block content %}
-<div class="row">
-    <!-- Statistics Cards -->
-    <div class="col-md-3">
-        <div class="stat-card stat-card-primary">
-            <i class="fas fa-exclamation-triangle fa-2x text-primary"></i>
-            <h2>{{ total_crimes }}</h2>
-            <p>Total Crimes</p>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Crime Record Management System</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <style>
+        /* Dashboard Styles */
+        :root {
+            --primary-color: #0d47a1;
+            --primary-dark: #002171;
+            --primary-light: #5472d3;
+            --accent-color: #d32f2f;
+            --light-gray: #f5f5f5;
+            --dark-gray: #212121;
+            --white: #ffffff;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+        }
+        
+        .sidebar {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background-color: var(--primary-color);
+        }
+        
+        .sidebar-menu {
+            padding: 0;
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .sidebar-menu a {
+            color: var(--white);
+            text-decoration: none;
+            display: block;
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+        }
+        
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .navbar {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .dropdown-toggle::after {
+            display: none;
+        }
+        
+        .stat-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card-primary {
+            border-top: 4px solid var(--primary-color);
+        }
+        
+        .stat-card-danger {
+            border-top: 4px solid var(--accent-color);
+        }
+        
+        .stat-card-success {
+            border-top: 4px solid #43a047;
+        }
+        
+        .stat-card-warning {
+            border-top: 4px solid #ff9800;
+        }
+        
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .stat-card h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .chart-container {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-container h5 {
+            margin-bottom: 15px;
+        }
+        
+        .recent-records {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+        }
+        
+        .recent-records h5 {
+            margin-bottom: 15px;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .badge {
+            padding: 6px 10px;
+            border-radius: 20px;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+        
+        .hamburger i {
+            font-size: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -250px;
+            }
+            
+            .content {
+                margin-left: 0;
+            }
+            
+            .sidebar.active {
+                margin-left: 0;
+            }
+            
+            .content.active {
+                margin-left: 250px;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-shield-alt"></i> Crime Record System</h4>
         </div>
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="{% url 'police_stations' %}"><i class="fas fa-building"></i> Police Stations</a>
+            </li>
+            <li>
+                <a href="{% url 'officers' %}"><i class="fas fa-user-shield"></i> Officers</a>
+            </li>
+            <li>
+                <a href="{% url 'crime_types' %}"><i class="fas fa-clipboard-list"></i> Crime Types</a>
+            </li>
+            <li>
+                <a href="{% url 'crimes' %}"><i class="fas fa-exclamation-triangle"></i> Crimes</a>
+            </li>
+            <li>
+                <a href="{% url 'fir_details' %}"><i class="fas fa-file-alt"></i> FIR Details</a>
+            </li>
+            <li>
+                <a href="{% url 'criminals' %}"><i class="fas fa-user-ninja"></i> Criminals</a>
+            </li>
+            <li>
+                <a href="{% url 'settings' %}"><i class="fas fa-cog"></i> Settings</a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </li>
+        </ul>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card stat-card-danger">
-            <i class="fas fa-user-ninja fa-2x text-danger"></i>
-            <h2>{{ total_criminals }}</h2>
-            <p>Criminals</p>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stat-card stat-card-success">
-            <i class="fas fa-building fa-2x text-success"></i>
-            <h2>{{ total_stations }}</h2>
-            <p>Police Stations</p>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stat-card stat-card-warning">
-            <i class="fas fa-user-shield fa-2x text-warning"></i>
-            <h2>{{ total_officers }}</h2>
-            <p>Officers</p>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <!-- Charts -->
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5>Crime Distribution</h5>
+    
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <div class="hamburger" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="d-flex ms-auto">
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="user-profile">
+                                <img src="{% static 'images/user-avatar.png' %}" alt="User Avatar">
+                                <span>Admin User</span>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="chart-container">
-                    <canvas id="crimesChart"></canvas>
+        </nav>
+        
+        <!-- Dashboard Content -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="mb-4">Dashboard</h1>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-primary text-center">
+                        <i class="fas fa-exclamation-triangle text-primary"></i>
+                        <h2>{{ total_crimes }}</h2>
+                        <p>Total Crimes</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-danger text-center">
+                        <i class="fas fa-user-ninja text-danger"></i>
+                        <h2>{{ total_criminals }}</h2>
+                        <p>Criminals</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-success text-center">
+                        <i class="fas fa-building text-success"></i>
+                        <h2>{{ total_stations }}</h2>
+                        <p>Police Stations</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-warning text-center">
+                        <i class="fas fa-user-shield text-warning"></i>
+                        <h2>{{ total_officers }}</h2>
+                        <p>Officers</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts -->
+            <div class="row">
+                <!-- Crime Type Distribution Chart -->
+                <div class="col-md-6 mb-4">
+                    <div class="chart-container">
+                        <h5><i class="fas fa-chart-bar me-2"></i> Crime Type Distribution</h5>
+                        <canvas id="crimeTypeChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Criminal Gender Distribution Chart -->
+                <div class="col-md-6 mb-4">
+                    <div class="chart-container">
+                        <h5><i class="fas fa-chart-pie me-2"></i> Criminal Gender Distribution</h5>
+                        <canvas id="genderChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Monthly Crime Chart -->
+                <div class="col-md-12 mb-4">
+                    <div class="chart-container">
+                        <h5><i class="fas fa-chart-line me-2"></i> Monthly Crime Statistics (Past 6 Months)</h5>
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent FIR Records -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="recent-records">
+                        <h5><i class="fas fa-file-alt me-2"></i> Recent FIR Reports</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="recentFIRTable">
+                                <thead>
+                                    <tr>
+                                        <th>FIR ID</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Crime Type</th>
+                                        <th>Officer</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for fir in recent_fir %}
+                                    <tr>
+                                        <td>{{ fir.fir_id }}</td>
+                                        <td>{{ fir.date }}</td>
+                                        <td>{{ fir.time }}</td>
+                                        <td>{{ fir.crime.crime_type.crime_type_name }}</td>
+                                        <td>{{ fir.officer.name }}</td>
+                                        <td>
+                                            <a href="{% url 'fir_detail' fir.fir_id %}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5>Criminal Gender Distribution</h5>
-            </div>
-            <div class="card-body">
-                <div class="chart-container">
-                    <canvas id="criminalsChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h5>Monthly FIR Reports</h5>
-            </div>
-            <div class="card-body">
-                <div class="chart-container">
-                    <canvas id="monthlyChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <!-- Recent FIRs -->
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h5>Recent FIR Reports</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>FIR ID</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Crime Type</th>
-                                <th>Officer</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for fir in recent_firs %}
-                            <tr>
-                                <td>{{ fir.fir_id }}</td>
-                                <td>{{ fir.date }}</td>
-                                <td>{{ fir.time }}</td>
-                                <td>{{ fir.crime.crime_type.crime_type_name }}</td>
-                                <td>{{ fir.officer.name }}</td>
-                                <td>
-                                    <a href="{% url 'edit_fir' fir.fir_id %}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6" class="text-center">No FIR reports found</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script>
+        // Toggle Sidebar
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+            document.querySelector('.content').classList.toggle('active');
+        });
+        
+        // Initialize DataTable
+        $(document).ready(function() {
+            $('#recentFIRTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                pageLength: 5,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+            });
+        });
+        
+        // Chart.js - Crime Type Distribution
+        const crimeTypeChart = document.getElementById('crimeTypeChart');
+        new Chart(crimeTypeChart, {
+            type: 'bar',
+            data: {
+                labels: {{ crime_type_labels|safe }},
+                datasets: [{
+                    label: 'Number of Crimes',
+                    data: {{ crime_type_data }},
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(199, 199, 199, 0.7)',
+                        'rgba(83, 102, 255, 0.7)',
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(199, 199, 199, 1)',
+                        'rgba(83, 102, 255, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Chart.js - Criminal Gender Distribution
+        const genderChart = document.getElementById('genderChart');
+        new Chart(genderChart, {
+            type: 'pie',
+            data: {
+                labels: ['Male', 'Female', 'Other'],
+                datasets: [{
+                    data: {{ gender_data }},
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(255, 206, 86, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+        
+        // Chart.js - Monthly Crime Statistics
+        const monthlyChart = document.getElementById('monthlyChart');
+        new Chart(monthlyChart, {
+            type: 'line',
+            data: {
+                labels: {{ monthly_labels|safe }},
+                datasets: [{
+                    label: 'Number of Crimes',
+                    data: {{ monthly_data }},
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

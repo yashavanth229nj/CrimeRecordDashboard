@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Record Management System</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #0d47a1;
+            --primary-dark: #002171;
+            --primary-light: #5472d3;
+            --accent-color: #d32f2f;
+            --light-gray: #f5f5f5;
+            --dark-gray: #212121;
+            --white: #ffffff;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+        }
+        
+        .hero-section {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 10px 25px;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .features {
+            padding: 80px 0;
+        }
+        
+        .feature-box {
+            text-align: center;
+            padding: 30px;
+            border-radius: 8px;
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            height: 100%;
+            transition: transform 0.3s;
+        }
+        
+        .feature-box:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .about-section {
+            background-color: var(--primary-light);
+            color: var(--white);
+            padding: 80px 0;
+        }
+        
+        .screenshot-section {
+            padding: 80px 0;
+        }
+        
+        .screenshot {
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .screenshot img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s;
+        }
+        
+        .screenshot:hover img {
+            transform: scale(1.05);
+        }
+        
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        /* Dashboard mockup */
+        .dashboard-mockup {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card-primary {
+            border-top: 4px solid var(--primary-color);
+        }
+        
+        .stat-card-danger {
+            border-top: 4px solid var(--accent-color);
+        }
+        
+        .stat-card-success {
+            border-top: 4px solid #43a047;
+        }
+        
+        .stat-card-warning {
+            border-top: 4px solid #ff9800;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .table-mockup {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .table-mockup th {
+            background-color: var(--primary-light);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .table-mockup td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .table-mockup tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1>Crime Record Management System</h1>
+            <p>An advanced digital solution for law enforcement agencies to efficiently manage and track crime records, police stations, officers, and criminal data.</p>
+            <a href="#features" class="btn btn-primary btn-lg">Learn More</a>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2>Key Features</h2>
+                    <p class="lead">Streamline your law enforcement record keeping with these powerful features</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Interactive Dashboard</h3>
+                        <p>Visual representation of crime statistics with interactive charts for better decision making.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>Police Station Management</h3>
+                        <p>Efficiently manage police stations with comprehensive details and officer assignments.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3>Officer Records</h3>
+                        <p>Maintain detailed officer records including rank, contact information, and station assignments.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>Crime Type Classification</h3>
+                        <p>Categorize crimes with detailed descriptions for organized record keeping and analysis.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>FIR Management</h3>
+                        <p>Create and manage First Information Reports with comprehensive details and tracking.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-ninja"></i>
+                        </div>
+                        <h3>Criminal Records</h3>
+                        <p>Maintain complete criminal profiles with their associated crimes and personal information.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Dashboard Mockup -->
+    <section class="dashboard-mockup">
+        <div class="container">
+            <h2 class="text-center mb-5">Dashboard Preview</h2>
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-primary">
+                        <i class="fas fa-exclamation-triangle fa-2x text-primary"></i>
+                        <h2>142</h2>
+                        <p>Total Crimes</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-danger">
+                        <i class="fas fa-user-ninja fa-2x text-danger"></i>
+                        <h2>87</h2>
+                        <p>Criminals</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-success">
+                        <i class="fas fa-building fa-2x text-success"></i>
+                        <h2>12</h2>
+                        <p>Police Stations</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card stat-card-warning">
+                        <i class="fas fa-user-shield fa-2x text-warning"></i>
+                        <h2>56</h2>
+                        <p>Officers</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Crime Distribution</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <i class="fas fa-chart-bar fa-4x text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Criminal Gender Distribution</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <i class="fas fa-chart-pie fa-4x text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Recent FIR Reports</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table-mockup" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>FIR ID</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Crime Type</th>
+                                        <th>Officer</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>FIR-001</td>
+                                        <td>2025-05-18</td>
+                                        <td>14:30</td>
+                                        <td>Theft</td>
+                                        <td>Insp. Johnson</td>
+                                        <td><button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>FIR-002</td>
+                                        <td>2025-05-17</td>
+                                        <td>09:45</td>
+                                        <td>Assault</td>
+                                        <td>Sgt. Williams</td>
+                                        <td><button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>FIR-003</td>
+                                        <td>2025-05-16</td>
+                                        <td>18:20</td>
+                                        <td>Robbery</td>
+                                        <td>Const. Davis</td>
+                                        <td><button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>About This System</h2>
+                    <p>The Crime Record Management System is a comprehensive solution designed to facilitate the efficient management of crime-related data for law enforcement agencies. It provides a centralized platform for recording, tracking, and analyzing crime incidents, criminal profiles, and police operations.</p>
+                    <p>Built using modern technologies including Django, Bootstrap, and Chart.js, the system offers a user-friendly interface with responsive design for optimal usability across devices.</p>
+                </div>
+                <div class="col-md-6">
+                    <h2>Technical Specifications</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Backend:</strong> Django (Python)</li>
+                        <li class="list-group-item"><strong>Frontend:</strong> HTML, CSS, JavaScript, Bootstrap 5</li>
+                        <li class="list-group-item"><strong>Database:</strong> MySQL</li>
+                        <li class="list-group-item"><strong>Data Visualization:</strong> Chart.js</li>
+                        <li class="list-group-item"><strong>Enhanced Tables:</strong> DataTables</li>
+                        <li class="list-group-item"><strong>Icons:</strong> FontAwesome</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Screenshots Section -->
+    <section class="screenshot-section">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2>System Interface Previews</h2>
+                    <p class="lead">Additional views of the Crime Record Management System</p>
+                </div>
+            </div>
+            
+            <!-- Police Stations Management Preview -->
+            <div class="row mb-5">
+                <div class="col-md-12">
+                    <h3>Police Stations Management</h3>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5>Police Stations List</h5>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Police Station
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <table class="table-mockup" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Contact Person</th>
+                                        <th>Status</th>
+                                        <th>Area ID</th>
+                                        <th>Address</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Central Police Station</td>
+                                        <td>Capt. Anderson</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>A-101</td>
+                                        <td>123 Main Street, Downtown</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Westside Precinct</td>
+                                        <td>Lt. Martinez</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>B-202</td>
+                                        <td>456 West Avenue, Westside</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>North District Station</td>
+                                        <td>Sgt. Thompson</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>C-303</td>
+                                        <td>789 North Road, Northside</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Criminal Records Preview -->
+            <div class="row mb-5">
+                <div class="col-md-12">
+                    <h3>Criminal Records</h3>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5>Criminals List</h5>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Criminal
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <table class="table-mockup" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Gender</th>
+                                        <th>Date of Birth</th>
+                                        <th>Address</th>
+                                        <th>Nationality</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>John Doe</td>
+                                        <td>Male</td>
+                                        <td>1985-07-12</td>
+                                        <td>123 Criminal Lane, Downtown</td>
+                                        <td>American</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Jane Smith</td>
+                                        <td>Female</td>
+                                        <td>1990-03-24</td>
+                                        <td>456 Outlaw Street, Westside</td>
+                                        <td>Canadian</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Robert Johnson</td>
+                                        <td>Male</td>
+                                        <td>1978-11-05</td>
+                                        <td>789 Felony Road, Southside</td>
+                                        <td>British</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Crime Types Preview -->
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Crime Types</h3>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5>Crime Types List</h5>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Crime Type
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <table class="table-mockup" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Theft</td>
+                                        <td>Unlawful taking of property without owner's consent.</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Assault</td>
+                                        <td>Physical attack or threat of attack on an individual.</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Robbery</td>
+                                        <td>Taking property by force or threat of force.</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Implementation Guide -->
+    <section class="implementation-guide mt-5 mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Local Implementation Guide</h2>
+                        </div>
+                        <div class="card-body">
+                            <p>To get the Crime Record Management System working on your local machine with the MySQL database:</p>
+                            
+                            <ol>
+                                <li class="mb-3">
+                                    <strong>Ensure MySQL is running locally</strong> with the credentials specified in the settings.py file.
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Create the database</strong> using the SQL script provided in the attached file.
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Install required dependencies:</strong>
+                                    <pre class="bg-light p-3 mt-2">pip install django mysqlclient</pre>
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Run the development server locally:</strong>
+                                    <pre class="bg-light p-3 mt-2">cd crimerecord
+python manage.py runserver</pre>
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Access the application</strong> at <code>http://localhost:8000</code> in your web browser.
+                                </li>
+                            </ol>
+                            
+                            <div class="alert alert-info">
+                                <h5><i class="fas fa-info-circle"></i> Note:</h5>
+                                <p>This system is configured to connect to a MySQL database running locally on your machine with the following settings:</p>
+                                <ul>
+                                    <li>Database: CrimeRecord</li>
+                                    <li>User: root</li>
+                                    <li>Password: CS0229@yashu</li>
+                                    <li>Host: localhost</li>
+                                    <li>Port: 3306</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Crime Record Management System. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

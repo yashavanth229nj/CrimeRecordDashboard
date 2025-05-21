@@ -22,8 +22,8 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd crimerecord && pip install django && python manage.py runserver 0.0.0.0:5000"
+args = "cd crimerecord && python -c \"import os; from django.core.management import execute_from_command_line; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crimerecord.settings'); execute_from_command_line(['manage.py', 'runserver', '0.0.0.0:5000'])\""
 waitForPort = 5000
 
 [deployment]
-run = ["sh", "-c", "cd crimerecord && pip install django && python manage.py runserver 0.0.0.0:5000"]
+run = ["sh", "-c", "cd crimerecord && python -c \"import os; from django.core.management import execute_from_command_line; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crimerecord.settings'); execute_from_command_line(['manage.py', 'runserver', '0.0.0.0:5000'])\""]

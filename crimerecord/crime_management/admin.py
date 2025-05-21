@@ -28,12 +28,12 @@ class CrimeTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Crime)
 class CrimeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'crime_type')
+    list_display = ('crime_id', 'crime_type')
     list_filter = ('crime_type',)
 
 @admin.register(FIRDetail)
 class FIRDetailAdmin(admin.ModelAdmin):
-    list_display = ('id', 'date', 'time', 'crime', 'user', 'officer')
+    list_display = ('fir_id', 'date', 'time', 'crime', 'user', 'officer')
     list_filter = ('date', 'officer')
     search_fields = ('description',)
 

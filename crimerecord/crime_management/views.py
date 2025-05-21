@@ -11,7 +11,10 @@ from .models import (
     Admin, User as CustomUser, Profile, PoliceStation, Officer, 
     CrimeType, Crime, FIRDetail, Criminal, CriminalCrime
 )
-from .forms import LoginForm
+from .forms import (
+    LoginForm, PoliceStationForm, OfficerForm, CrimeTypeForm,
+    CrimeForm, FIRDetailForm, CriminalForm
+)
 
 def user_login(request):
     if request.method == 'POST':
@@ -118,7 +121,9 @@ def dashboard(request):
         if month_date.month == 12:
             month_end = month_date.replace(day=31)
         else:
-            next_month = month_date.replace(month=month_date.month+1)
+            # Use relativedelta to correctly handle month transitions
+            from dateutil.relativedelta import relativedelta
+            next_month = month_date + relativedelta(months=1)
             month_end = next_month.replace(day=1) - timedelta(days=1)
         
         # Count FIRs for this month
@@ -148,11 +153,87 @@ def police_stations(request):
     stations = PoliceStation.objects.all()
     return render(request, 'police_stations.html', {'stations': stations})
 
+@login_required
+def add_police_station(request):
+    if request.method == 'POST':
+        form = PoliceStationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('police_stations')
+    else:
+        form = PoliceStationForm()
+    
+    return render(request, 'form_templates/station_form.html', {
+        'form': form,
+        'title': 'Add Police Station'
+    })
+
+@login_required
+def edit_police_station(request, station_id):
+    station = get_object_or_404(PoliceStation, station_id=station_id)
+    
+    if request.method == 'POST':
+        form = PoliceStationForm(request.POST, instance=station)
+        if form.is_valid():
+            form.save()
+            return redirect('police_stations')
+    else:
+        form = PoliceStationForm(instance=station)
+    
+    return render(request, 'form_templates/station_form.html', {
+        'form': form,
+        'title': 'Edit Police Station'
+    })
+
+@login_required
+def delete_police_station(request, station_id):
+    station = get_object_or_404(PoliceStation, station_id=station_id)
+    station.delete()
+    return redirect('police_stations')
+
 # Officers management
 @login_required
 def officers(request):
     all_officers = Officer.objects.all()
     return render(request, 'officers.html', {'officers': all_officers})
+
+@login_required
+def add_officer(request):
+    if request.method == 'POST':
+        form = OfficerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('officers')
+    else:
+        form = OfficerForm()
+    
+    return render(request, 'form_templates/officer_form.html', {
+        'form': form,
+        'title': 'Add Officer'
+    })
+
+@login_required
+def edit_officer(request, officer_id):
+    officer = get_object_or_404(Officer, officer_id=officer_id)
+    
+    if request.method == 'POST':
+        form = OfficerForm(request.POST, instance=officer)
+        if form.is_valid():
+            form.save()
+            return redirect('officers')
+    else:
+        form = OfficerForm(instance=officer)
+    
+    return render(request, 'form_templates/officer_form.html', {
+        'form': form,
+        'title': 'Edit Officer'
+    })
+
+@login_required
+def delete_officer(request, officer_id):
+    officer = get_object_or_404(Officer, officer_id=officer_id)
+    officer.delete()
+    return redirect('officers')
 
 # Crime Types management
 @login_required
@@ -160,17 +241,131 @@ def crime_types(request):
     all_crime_types = CrimeType.objects.all()
     return render(request, 'crime_types.html', {'crime_types': all_crime_types})
 
+@login_required
+def add_crime_type(request):
+    if request.method == 'POST':
+        form = CrimeTypeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('crime_types')
+    else:
+        form = CrimeTypeForm()
+    
+    return render(request, 'form_templates/crime_type_form.html', {
+        'form': form,
+        'title': 'Add Crime Type'
+    })
+
+@login_required
+def edit_crime_type(request, crime_type_id):
+    crime_type = get_object_or_404(CrimeType, crime_type_id=crime_type_id)
+    
+    if request.method == 'POST':
+        form = CrimeTypeForm(request.POST, instance=crime_type)
+        if form.is_valid():
+            form.save()
+            return redirect('crime_types')
+    else:
+        form = CrimeTypeForm(instance=crime_type)
+    
+    return render(request, 'form_templates/crime_type_form.html', {
+        'form': form,
+        'title': 'Edit Crime Type'
+    })
+
+@login_required
+def delete_crime_type(request, crime_type_id):
+    crime_type = get_object_or_404(CrimeType, crime_type_id=crime_type_id)
+    crime_type.delete()
+    return redirect('crime_types')
+
 # Crimes management
 @login_required
 def crimes(request):
     all_crimes = Crime.objects.all()
     return render(request, 'crimes.html', {'crimes': all_crimes})
 
+@login_required
+def add_crime(request):
+    if request.method == 'POST':
+        form = CrimeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('crimes')
+    else:
+        form = CrimeForm()
+    
+    return render(request, 'form_templates/crime_form.html', {
+        'form': form,
+        'title': 'Add Crime'
+    })
+
+@login_required
+def edit_crime(request, crime_id):
+    crime = get_object_or_404(Crime, crime_id=crime_id)
+    
+    if request.method == 'POST':
+        form = CrimeForm(request.POST, instance=crime)
+        if form.is_valid():
+            form.save()
+            return redirect('crimes')
+    else:
+        form = CrimeForm(instance=crime)
+    
+    return render(request, 'form_templates/crime_form.html', {
+        'form': form,
+        'title': 'Edit Crime'
+    })
+
+@login_required
+def delete_crime(request, crime_id):
+    crime = get_object_or_404(Crime, crime_id=crime_id)
+    crime.delete()
+    return redirect('crimes')
+
 # FIR Details management
 @login_required
 def fir_details(request):
     all_fir_details = FIRDetail.objects.all().order_by('-date', '-time')
-    return render(request, 'fir_details.html', {'fir_details': all_fir_details})
+    return render(request, 'fir_details.html', {'firs': all_fir_details})
+
+@login_required
+def add_fir(request):
+    if request.method == 'POST':
+        form = FIRDetailForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('fir_details')
+    else:
+        form = FIRDetailForm()
+    
+    return render(request, 'form_templates/fir_form.html', {
+        'form': form,
+        'title': 'Add FIR Report'
+    })
+
+@login_required
+def edit_fir(request, fir_id):
+    fir = get_object_or_404(FIRDetail, fir_id=fir_id)
+    
+    if request.method == 'POST':
+        form = FIRDetailForm(request.POST, instance=fir)
+        if form.is_valid():
+            form.save()
+            return redirect('fir_details')
+    else:
+        form = FIRDetailForm(instance=fir)
+    
+    return render(request, 'form_templates/fir_form.html', {
+        'form': form,
+        'title': 'Edit FIR Report'
+    })
+
+@login_required
+def delete_fir(request, fir_id):
+    fir = get_object_or_404(FIRDetail, fir_id=fir_id)
+    fir.delete()
+    return redirect('fir_details')
 
 # Criminals management
 @login_required
@@ -178,7 +373,97 @@ def criminals(request):
     all_criminals = Criminal.objects.all()
     return render(request, 'criminals.html', {'criminals': all_criminals})
 
+@login_required
+def add_criminal(request):
+    if request.method == 'POST':
+        # Assume we have a CriminalForm in forms.py
+        form = CriminalForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('criminals')
+    else:
+        form = CriminalForm()
+    
+    return render(request, 'form_templates/criminal_form.html', {
+        'form': form,
+        'title': 'Add Criminal'
+    })
+
+@login_required
+def edit_criminal(request, criminal_id):
+    criminal = get_object_or_404(Criminal, criminal_id=criminal_id)
+    
+    if request.method == 'POST':
+        form = CriminalForm(request.POST, instance=criminal)
+        if form.is_valid():
+            form.save()
+            return redirect('criminals')
+    else:
+        form = CriminalForm(instance=criminal)
+    
+    return render(request, 'form_templates/criminal_form.html', {
+        'form': form,
+        'title': 'Edit Criminal'
+    })
+
+@login_required
+def delete_criminal(request, criminal_id):
+    criminal = get_object_or_404(Criminal, criminal_id=criminal_id)
+    criminal.delete()
+    return redirect('criminals')
+
 # Settings page
 @login_required
 def settings(request):
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type', '')
+        
+        if form_type == 'profile':
+            # Handle profile form
+            full_name = request.POST.get('full_name', '')
+            email = request.POST.get('email', '')
+            
+            if full_name:
+                names = full_name.split(' ', 1)
+                request.user.first_name = names[0]
+                if len(names) > 1:
+                    request.user.last_name = names[1]
+                else:
+                    request.user.last_name = ''
+            
+            if email:
+                request.user.email = email
+            
+            request.user.save()
+            
+            # Handle profile image upload if included
+            if 'profile_image' in request.FILES:
+                # You would need to add logic to handle the file upload
+                pass
+                
+            return redirect('settings')
+            
+        elif form_type == 'password':
+            # Handle password change form
+            current_password = request.POST.get('current_password', '')
+            new_password = request.POST.get('new_password', '')
+            confirm_password = request.POST.get('confirm_password', '')
+            
+            if current_password and new_password and confirm_password:
+                if request.user.check_password(current_password):
+                    if new_password == confirm_password:
+                        request.user.set_password(new_password)
+                        request.user.save()
+                        # Re-authenticate the user after password change
+                        from django.contrib.auth import update_session_auth_hash
+                        update_session_auth_hash(request, request.user)
+                        return redirect('settings')
+            
+        elif form_type == 'system':
+            # Handle system settings
+            # In a real app, you might save these to a Settings model
+            # or to user preferences
+            
+            return redirect('settings')
+    
     return render(request, 'settings.html')

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Crimes - Crime Record Management System{% endblock %}
+
+{% block page_title %}Crimes{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Crimes List</h5>
+        <a href="{% url 'add_crime' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Crime
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Crime Type</th>
+                        <th>Associated Criminals</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for crime in crimes %}
+                    <tr>
+                        <td>{{ crime.crime_id }}</td>
+                        <td>{{ crime.crime_type.crime_type_name }}</td>
+                        <td>
+                            {% with criminals=crime.criminalcrime_set.all %}
+                                {% if criminals %}
+                                    {{ criminals.count }} criminal(s)
+                                {% else %}
+                                    No criminals associated
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'edit_crime' crime.crime_id %}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'delete_crime' crime.crime_id %}" class="btn btn-sm btn-danger delete-btn" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No crimes found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Crime Record Management System{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Statistics Cards -->
+    <div class="col-md-3">
+        <div class="stat-card stat-card-primary">
+            <i class="fas fa-exclamation-triangle fa-2x text-primary"></i>
+            <h2>{{ total_crimes }}</h2>
+            <p>Total Crimes</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card stat-card-danger">
+            <i class="fas fa-user-ninja fa-2x text-danger"></i>
+            <h2>{{ total_criminals }}</h2>
+            <p>Criminals</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card stat-card-success">
+            <i class="fas fa-building fa-2x text-success"></i>
+            <h2>{{ total_stations }}</h2>
+            <p>Police Stations</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card stat-card-warning">
+            <i class="fas fa-user-shield fa-2x text-warning"></i>
+            <h2>{{ total_officers }}</h2>
+            <p>Officers</p>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Charts -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Crime Distribution</h5>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="crimesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Criminal Gender Distribution</h5>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="criminalsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Monthly FIR Reports</h5>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Recent FIRs -->
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent FIR Reports</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>FIR ID</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Crime Type</th>
+                                <th>Officer</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for fir in recent_firs %}
+                            <tr>
+                                <td>{{ fir.fir_id }}</td>
+                                <td>{{ fir.date }}</td>
+                                <td>{{ fir.time }}</td>
+                                <td>{{ fir.crime.crime_type.crime_type_name }}</td>
+                                <td>{{ fir.officer.name }}</td>
+                                <td>
+                                    <a href="{% url 'edit_fir' fir.fir_id %}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No FIR reports found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

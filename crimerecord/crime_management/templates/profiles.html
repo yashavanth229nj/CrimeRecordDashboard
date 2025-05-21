@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Profiles - Crime Record Management System{% endblock %}
+
+{% block page_title %}Profiles{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5>User Profiles</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped data-table">
+                <thead>
+                    <tr>
+                        <th>Profile ID</th>
+                        <th>User ID</th>
+                        <th>Associated Criminals</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for profile in profiles %}
+                    <tr>
+                        <td>{{ profile.profile_id }}</td>
+                        <td>{{ profile.user.user_id }}</td>
+                        <td>
+                            {% with criminals=profile.profilecriminal_set.all %}
+                                {% if criminals %}
+                                    {{ criminals.count }} criminal(s)
+                                {% else %}
+                                    No associated criminals
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No profiles found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

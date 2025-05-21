@@ -1,0 +1,29 @@
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+packages = ["cargo", "libiconv", "libxcrypt", "openssl", "pkg-config", "rustc"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Crime Record Management Server"
+
+[[workflows.workflow]]
+name = "Crime Record Management Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd crimerecord && pip install django mysqlclient && python manage.py runserver 0.0.0.0:5000"
+waitForPort = 5000
+
+[deployment]
+run = ["sh", "-c", "cd crimerecord && pip install django mysqlclient && python manage.py runserver 0.0.0.0:5000"]

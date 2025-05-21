@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Crime Record Management System{% endblock %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5>{{ title }}</h5>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ form.name.id_for_label }}">Officer Name *</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="text-danger">
+                                {{ form.name.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ form.off_rank.id_for_label }}">Rank</label>
+                        {{ form.off_rank }}
+                        {% if form.off_rank.errors %}
+                            <div class="text-danger">
+                                {{ form.off_rank.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ form.contact.id_for_label }}">Contact</label>
+                        {{ form.contact }}
+                        {% if form.contact.errors %}
+                            <div class="text-danger">
+                                {{ form.contact.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ form.station.id_for_label }}">Police Station *</label>
+                        {{ form.station }}
+                        {% if form.station.errors %}
+                            <div class="text-danger">
+                                {{ form.station.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group mb-3">
+                <a href="{% url 'officers' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

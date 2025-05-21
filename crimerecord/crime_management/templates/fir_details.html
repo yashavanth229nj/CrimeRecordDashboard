@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}FIR Details - Crime Record Management System{% endblock %}
+
+{% block page_title %}FIR Details{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>FIR Reports List</h5>
+        <a href="{% url 'add_fir' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add FIR Report
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped data-table">
+                <thead>
+                    <tr>
+                        <th>FIR ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Crime Type</th>
+                        <th>User</th>
+                        <th>Officer</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fir in firs %}
+                    <tr>
+                        <td>{{ fir.fir_id }}</td>
+                        <td>{{ fir.date }}</td>
+                        <td>{{ fir.time|default:"-" }}</td>
+                        <td>{{ fir.crime.crime_type.crime_type_name }}</td>
+                        <td>User #{{ fir.user.user_id }}</td>
+                        <td>{{ fir.officer.name }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'edit_fir' fir.fir_id %}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'delete_fir' fir.fir_id %}" class="btn btn-sm btn-danger delete-btn" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No FIR reports found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Criminals - Crime Record Management System{% endblock %}
+
+{% block page_title %}Criminals{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Criminals List</h5>
+        <a href="{% url 'add_criminal' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Criminal
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Date of Birth</th>
+                        <th>Address</th>
+                        <th>Nationality</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for criminal in criminals %}
+                    <tr>
+                        <td>{{ criminal.criminal_id }}</td>
+                        <td>{{ criminal.name }}</td>
+                        <td>{{ criminal.gender|default:"-" }}</td>
+                        <td>{{ criminal.date_of_birth|default:"-" }}</td>
+                        <td>{{ criminal.address|default:"-" }}</td>
+                        <td>{{ criminal.nationality|default:"-" }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'edit_criminal' criminal.criminal_id %}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'delete_criminal' criminal.criminal_id %}" class="btn btn-sm btn-danger delete-btn" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No criminals found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

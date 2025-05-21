@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Police Stations - Crime Record Management System{% endblock %}
+
+{% block page_title %}Police Stations{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Police Stations List</h5>
+        <a href="{% url 'add_police_station' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Police Station
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Contact Person</th>
+                        <th>Status</th>
+                        <th>Area ID</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for station in stations %}
+                    <tr>
+                        <td>{{ station.station_id }}</td>
+                        <td>{{ station.name }}</td>
+                        <td>{{ station.contact_person|default:"-" }}</td>
+                        <td>
+                            {% if station.status %}
+                                <span class="badge bg-success">{{ station.status }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Not set</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ station.area_id|default:"-" }}</td>
+                        <td>{{ station.address|default:"-" }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'edit_police_station' station.station_id %}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'delete_police_station' station.station_id %}" class="btn btn-sm btn-danger delete-btn" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No police stations found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

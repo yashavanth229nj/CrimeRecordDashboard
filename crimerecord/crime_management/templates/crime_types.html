@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Crime Types - Crime Record Management System{% endblock %}
+
+{% block page_title %}Crime Types{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Crime Types List</h5>
+        <a href="{% url 'add_crime_type' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Crime Type
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for crime_type in crime_types %}
+                    <tr>
+                        <td>{{ crime_type.crime_type_id }}</td>
+                        <td>{{ crime_type.crime_type_name }}</td>
+                        <td>{{ crime_type.description|truncatewords:20|default:"-" }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'edit_crime_type' crime_type.crime_type_id %}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'delete_crime_type' crime_type.crime_type_id %}" class="btn btn-sm btn-danger delete-btn" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No crime types found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

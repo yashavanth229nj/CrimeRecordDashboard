@@ -1,0 +1,101 @@
+-- Drop and Create Database
+DROP DATABASE IF EXISTS CrimeRecord;
+CREATE DATABASE CrimeRecord;
+USE CrimeRecord;
+
+-- Table: Admin
+CREATE TABLE Admin (
+    Admin_ID INT PRIMARY KEY AUTO_INCREMENT
+    -- No other attributes shown in the diagram
+);
+
+-- Table: User
+CREATE TABLE User (
+    User_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Admin_ID INT NOT NULL,
+    FOREIGN KEY (Admin_ID) REFERENCES Admin(Admin_ID)
+);
+
+-- Table: Profile
+CREATE TABLE Profile (
+    Profile_ID INT PRIMARY KEY AUTO_INCREMENT,
+    User_ID INT NOT NULL,
+    FOREIGN KEY (User_ID) REFERENCES User(User_ID)
+);
+
+-- Table: Police_Station
+CREATE TABLE Police_Station (
+    Station_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    Contact_Person VARCHAR(100),
+    Status VARCHAR(50),
+    Area_ID VARCHAR(50),
+    Address VARCHAR(255)
+);
+
+-- Table: Officers
+CREATE TABLE Officers (
+    Officer_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    Off_Rank VARCHAR(50),
+    Contact VARCHAR(20),
+    Station_ID INT NOT NULL,
+    FOREIGN KEY (Station_ID) REFERENCES Police_Station(Station_ID)
+);
+
+-- Table: CrimeType
+CREATE TABLE CrimeType (
+    CrimeType_ID INT PRIMARY KEY AUTO_INCREMENT,
+    CrimeType_Name VARCHAR(100) NOT NULL,
+    Description TEXT
+);
+
+-- Table: Crime
+CREATE TABLE Crime (
+    Crime_ID INT PRIMARY KEY AUTO_INCREMENT,
+    CrimeType_ID INT NOT NULL,
+    FOREIGN KEY (CrimeType_ID) REFERENCES CrimeType(CrimeType_ID)
+);
+
+-- Table: FIR_Details
+CREATE TABLE FIR_Details (
+    FIR_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Description TEXT,
+    Date DATE NOT NULL,
+    Time TIME,
+    Crime_ID INT NOT NULL,
+    User_ID INT NOT NULL,
+    Officer_ID INT NOT NULL,
+    FOREIGN KEY (Crime_ID) REFERENCES Crime(Crime_ID),
+    FOREIGN KEY (User_ID) REFERENCES User(User_ID),
+    FOREIGN KEY (Officer_ID) REFERENCES Officers(Officer_ID)
+);
+
+-- Table: Criminals
+CREATE TABLE Criminals (
+    Criminal_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    Gender ENUM('Male', 'Female', 'Other'),
+    Date_of_Birth DATE,
+    Address VARCHAR(255),
+    Nationality VARCHAR(50)
+);
+
+-- Junction Table: Criminal_Crime (Many-to-Many)
+CREATE TABLE Criminal_Crime (
+    Criminal_ID INT NOT NULL,
+    Crime_ID INT NOT NULL,
+    PRIMARY KEY (Criminal_ID, Crime_ID),
+    FOREIGN KEY (Criminal_ID) REFERENCES Criminals(Criminal_ID),
+    FOREIGN KEY (Crime_ID) REFERENCES Crime(Crime_ID)
+);
+
+-- Junction Table: Profile_Criminals (User Profiles with multiple criminals)
+CREATE TABLE Profile_Criminal (
+    Profile_ID INT NOT NULL,
+    Criminal_ID INT NOT NULL,
+    PRIMARY KEY (Profile_ID, Criminal_ID),
+    FOREIGN KEY (Profile_ID) REFERENCES Profile(Profile_ID),
+    FOREIGN KEY (Criminal_ID) REFERENCES Criminals(Criminal_ID)
+);
+show tables;

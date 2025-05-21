@@ -22,8 +22,8 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd crimerecord && pip install django mysqlclient && python manage.py runserver 0.0.0.0:5000"
+args = "cd crimerecord && pip install django && python manage.py runserver 0.0.0.0:5000"
 waitForPort = 5000
 
 [deployment]
-run = ["sh", "-c", "cd crimerecord && pip install django mysqlclient && python manage.py runserver 0.0.0.0:5000"]
+run = ["sh", "-c", "cd crimerecord && pip install django && python manage.py runserver 0.0.0.0:5000"]
